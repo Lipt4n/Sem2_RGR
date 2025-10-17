@@ -1,18 +1,14 @@
-#include "iostream"
-#include "stdexcept"
-#include "head.h"
+#include <iostream>
+#include "types.hpp"
+#include "utils.hpp"
+#include "file_io.hpp"
+#include "get_keys.hpp"
+#include "ciphers.hpp"
 
 using namespace std;
 
-enum class CmdType {
-    ENCRYPT = 1,
-    DECRYPT = 2,
-    EXIT = 0
-};
-
 int main() {
     while (true) {
-        int userInput = -1;
         system("clear");
         cout << "========== МЕНЮ ==========" << endl;
         cout << "Добро пожаловать!" << endl << endl;
@@ -20,35 +16,39 @@ int main() {
         cout << "1. Шифрование" << endl;
         cout << "2. Дешифрование" << endl;
         cout << "0. Выход" << endl;
-        while (true) {
-            try {
-                cout << "   Ввод > ";
-                cin >> userInput;
-                if (userInput >= 0 && userInput <= 2) {
-                    break;
-                } else {
-                    throw invalid_argument("Некорректный ввод!");
-                }
-            } catch (const exception& e) {
-                cout << "Ошибка: " << e.what() << endl;
-                cin.clear();
-                cin.ignore(256, '\n');
-            }
-        }
-        auto userCmd = static_cast<CmdType>(userInput);
-        switch (userCmd) {
-            case CmdType::ENCRYPT: {
-                encrypt();
-                break;
-            }
-            case CmdType::DECRYPT: {
-                decrypt();
-                break;
-            }
-            case CmdType::EXIT: {
-                return 0;
-            }
+        int input_mode = GetIntInput("Ввод", 0, 2);
+        auto mode = static_cast<ModeType>(input_mode);
+        if (mode == ModeType::EXIT) {return 0;}
+
+        system("clear");
+        cout << "========== ВЫБОР ШИФРА ==========" << endl;
+        cout << "Выбранный режим: " << (mode == ModeType::ENCRYPT ? "Шифрование" : "Дешифрование") << endl << endl;
+        cout << "Выберите шифр:" << endl;
+        cout << "1. Гронсфельда" << endl;
+        cout << "2. Вернама" << endl;
+        cout << "3. Скитала" << endl;
+        int input_cipher = GetIntInput("Ввод", 1, 3);
+        auto cipher = static_cast<CipherType>(input_cipher);
+
+        system("clear");
+        cout << "========== ВЫБОР ФАЙЛА ==========" << endl << endl;
+        byte_array file = ReadFileToBytearray();
+        byte_array key = GetKey(mode, cipher, file.size());
+        
+
+        system("clear");
+        cout << "========== ПОДТВЕРЖДЕНИЕ ==========" << endl;
+        cout << "Выбранный режим: " << (mode == ModeType::ENCRYPT ? "Шифрование" : "Дешифрование") << endl;
+        cout << "Выбранный шифр: " << NameOfCipher(cipher) << endl;
+        cout << "Файл: Загружен" << endl;
+        cout << "Ключ: " << DisplayKey(cipher, key) << endl << endl;
+        cout << "Продолжить? 1 - Да / 2 - В меню" << endl;
+
+        int confirm = GetIntInput("Ввод",1,2);
+        byte_array result;
+        if (confirm == 1) {
+            result = EncryptDecrypt(mode, cipher, file, key);
+            SaveBytearrayToFile(result, "результат");   
         }
     }
 }
-
