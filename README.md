@@ -5,4 +5,4 @@
 2. Вернама
 3. Скитала
 
-![[Files/photo.jpg]]
+![alt text](https://github.com/Lipt4n/Sem2_RGR/blob/main/Files/photo.jpg?raw=true)
