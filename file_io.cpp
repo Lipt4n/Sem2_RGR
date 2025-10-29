@@ -14,6 +14,7 @@ byte_array ReadFileToBytearray() {
     ClearCin();
     while (true) {
         try {
+            cin.clear();
             cout << "   Введите относительный путь до файла > ";
             getline(cin, filename);
             if (filename.empty()) {
@@ -40,6 +41,7 @@ byte_array ReadFileToBytearray() {
         }
     }
     cout << "Данные успешно прочитаны!" << endl;
+    WaitForEnter();
     return buffer;
 }
 
@@ -47,11 +49,12 @@ void SaveBytearrayToFile(const byte_array& data, const string& hint) {
     cout << "Желаете сохранить " << hint << " в файл? 1 - Да / 2 - Нет" << endl;
     int input = GetIntInput("Выбор", 1, 2);
     if (input == 1) {
+        ClearCin();
         while(true) {
             try {
+                cin.clear();
                 string filepath;
                 cout << "   Введите путь и имя файла (например, output.bin) > ";
-                ClearCin();
                 getline(cin, filepath);
                 if (filepath.empty()) {
                     throw runtime_error("Путь не введён!");
@@ -65,7 +68,7 @@ void SaveBytearrayToFile(const byte_array& data, const string& hint) {
                 }
                 ofstream file(filepath, ios::binary);
                 if (!file.is_open()) {
-                    throw runtime_error("Путь введён неккоректно или файл не существует!");
+                    throw runtime_error("Путь введён неккоректно!");
                 }
                 if (!data.empty()) {
                     file.write(reinterpret_cast<const char*>(&data[0]), data.size());
@@ -77,7 +80,6 @@ void SaveBytearrayToFile(const byte_array& data, const string& hint) {
                 break;
             } catch (const exception& e) {
                 cout << "Ошибка: " << e.what() << endl;
-                ClearCin();
             }
         }
     }

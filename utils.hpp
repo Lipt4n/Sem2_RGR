@@ -4,6 +4,8 @@
 
 void ClearCin();
 
+void WaitForEnter();
+
 int GetMin(const int& a, const int& b);
 
 std::string NameOfCipher(CipherType CP);

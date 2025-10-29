@@ -10,6 +10,11 @@ void ClearCin() {
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+void WaitForEnter() {
+    cout << "Нажмите Enter для продолжения...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
 int GetMin(const int& a, const int& b) {
     if (a > b) {
         return b;

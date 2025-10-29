@@ -48,7 +48,8 @@ int main() {
         byte_array result;
         if (confirm == 1) {
             result = EncryptDecrypt(mode, cipher, file, key);
-            SaveBytearrayToFile(result, "результат");   
+            SaveBytearrayToFile(result, "результат");
+            WaitForEnter();   
         }
     }
 }

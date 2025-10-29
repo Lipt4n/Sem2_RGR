@@ -27,6 +27,7 @@ byte_array InputKey(const CipherType& Cipher, const size_t& size_of_file) {
                 key = GetIntInput("Введите число для байта " + to_string(i), 0, 255);
                 key_in_array.push_back(key);
             }
+            break;
         }
         case CipherType::SCYTALE: {
             cout << "Выбран шифр Скитала, введите любое число >0 и <" << GetMin(255, size_of_file) << endl;
@@ -125,29 +126,34 @@ byte_array GetKey(const ModeType& Mode, const CipherType& Cipher, const size_t& 
     system("clear");
     cout << "========== ВЫБОР КЛЮЧА ==========" << endl << endl;
     cout << "Выберите источник ключа:" << endl;
-    cout << "1. Ввести*" << endl;
+    cout << ((Cipher == CipherType::VERNAM) ? "1. Ввести*" : "1. Ввести") << endl;
     cout << "2. Из файла (bin)";
     cout << ((Mode == ModeType::ENCRYPT) ? "\n3. Сгенерировать" : "") << endl;
-    cout << "* - Если у вас выбран шифр Вернама, вам придется вводить число 0-255 на каждый байт файла." << endl;
+    cout << ((Cipher == CipherType::VERNAM) ? "\n* - При выборе вам придется вводить число 0-255 на каждый байт файла." : "");
+    cout << endl;
     int source_of_key = GetIntInput("Выбор", 1, (Mode == ModeType::ENCRYPT) ? 3 : 2);
+    byte_array key;
     switch (source_of_key) {
         case 1: {
-            byte_array key = InputKey(Cipher, size_of_file);
+            key = InputKey(Cipher, size_of_file);
             if (Mode == ModeType::ENCRYPT) {
-                SaveBytearrayToFile(key, "ключ");    
+                SaveBytearrayToFile(key, "ключ"); 
             }
-            return key;
+            break;
         }
         case 2: {
-            return ReadKey(Cipher, size_of_file);
+            key = ReadKey(Cipher, size_of_file);
+            break;
         }
         case 3: {
-            byte_array key = GenKey(Cipher, size_of_file);
+            key = GenKey(Cipher, size_of_file);
             if (Mode == ModeType::ENCRYPT) {
                 SaveBytearrayToFile(key, "ключ");    
             }
-            return key;
+            break;
         }
     }
-    return {};
+    ClearCin();
+    WaitForEnter();
+    return key;
 }
