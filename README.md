@@ -4,3 +4,5 @@
 1. Гронсфельда
 2. Вернама
 3. Скитала
+
+![alt text](https://github.com/Lipt4n/Sem2_RGR/blob/main/Files/photo.jpg?raw=true)
