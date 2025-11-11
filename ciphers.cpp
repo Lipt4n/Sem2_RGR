@@ -65,24 +65,29 @@ byte_array Vernam(const byte_array& first_text, const byte_array& key) {
 
 byte_array ScytaleEncrypt(const byte_array& plain_text, const byte_array& key) {
     cout << "Процесс запущен!" << endl;
-    cout << "Прогресс: ";
-    int one_block = plain_text.size() / 10;
-    int progress = 0;
-    int rows = key[0];
-    int columns = (plain_text.size() + rows - 1) / rows;
-    byte_array cipher_text(plain_text.size());
-    for (size_t i = 0; i < plain_text.size(); i++) {
-        int row = i % rows;
-        int col = i / rows;
-        int new_index = row * columns + col;
-        cipher_text[new_index] = plain_text[i];
-        if (one_block != 0 && i / one_block != progress) {
-            progress += 1;
-            cout << "■";
+    size_t rows = key[0];
+    size_t length = plain_text.size();
+    size_t columns = (length + rows - 1) / rows;
+    size_t remainder = length % rows;
+    vector<vector<unsigned char>> table(rows);
+    for (size_t r = 0; r < rows; r++) {
+        table[r].resize(columns - (r < remainder ? 0 : 1));
+    }
+    size_t index = 0;
+    for (size_t r = 0; r < rows; r++) {
+        for (size_t c = 0; c < table[r].size(); c++) {
+            table[r][c] = plain_text[index++];
         }
     }
-    if (one_block == 0) {
-        cout << "■■■■■■■■■■";
+    byte_array cipher_text(length);
+    index = 0;
+    for (size_t c = 0; c < columns; c++) {
+        for (size_t r = 0; r < rows; r++) {
+            if (c < table[r].size()) {
+                cipher_text[index++] = table[r][c];
+            }
+
+        }
     }
     cout << endl << "Процесс успешно завершен!" << endl;
     return cipher_text;
@@ -90,24 +95,28 @@ byte_array ScytaleEncrypt(const byte_array& plain_text, const byte_array& key) {
 
 byte_array ScytaleDecrypt(const byte_array& cipher_text, const byte_array& key) {
     cout << "Процесс запущен!" << endl;
-    cout << "Прогресс: ";
-    int one_block = cipher_text.size() / 10;
-    int progress = 0;
-    int rows = key[0];
-    int columns = (cipher_text.size() + rows - 1) / rows;
-    byte_array plain_text(cipher_text.size());
-    for (size_t i = 0; i < cipher_text.size(); i++) {
-        int col = i % columns;
-        int row = i / columns;
-        int new_index = row + col * rows;
-        plain_text[new_index] = cipher_text[i];
-        if (one_block != 0 && i / one_block != progress) {
-            progress += 1;
-            cout << "■";
+    size_t rows = key[0];
+    size_t length = cipher_text.size();
+    size_t columns = (length + rows - 1) / rows;
+    size_t remainder = length % rows;
+    vector<vector<unsigned char>> table(rows);
+    for (size_t r = 0; r < rows; r++) {
+        table[r].resize(columns - (r < remainder ? 0 : 1));
+    }
+    size_t index = 0;
+    for (size_t c = 0; c < columns; c++) {
+        for (size_t r = 0; r < rows; r++) {
+            if (c < table[r].size()) {
+                table[r][c] = cipher_text[index++];
+            }
         }
     }
-    if (one_block == 0) {
-        cout << "■■■■■■■■■■";
+    byte_array plain_text(length);
+    index = 0;
+    for (size_t r = 0; r < rows; r++) {
+        for (size_t c = 0; c < table[r].size(); c++) {
+            plain_text[index++] = table[r][c];
+        }
     }
     cout << endl << "Процесс успешно завершен!" << endl;
     return plain_text;
