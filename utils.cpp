@@ -48,7 +48,7 @@ string DisplayKey(CipherType cipher, byte_array key) {
         }
         case (CipherType::VERNAM): {
             string res;
-            for (int i = 0; i < GetMin(20, key.size()); i++) {
+            for (int i = 0; i < GetMin(10, key.size()); i++) {
                 res += to_string(key[i]) + " ";
             }
             res += "...";

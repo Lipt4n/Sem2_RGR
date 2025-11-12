@@ -6,8 +6,8 @@ using namespace std;
 byte_array GronsfeldEncrypt(const byte_array& plain_text, const byte_array& key) {
     cout << "Процесс запущен!" << endl;
     cout << "Прогресс: ";
-    int one_block = plain_text.size() / 10;
-    int progress = 0;
+    size_t one_block = plain_text.size() / 10;
+    size_t progress = 0;
     byte_array cipher_text(plain_text.size());
     for (size_t i = 0; i < plain_text.size(); i++) {
         cipher_text[i] = (plain_text[i] + key[i % key.size()]) % 256; 
@@ -26,8 +26,8 @@ byte_array GronsfeldEncrypt(const byte_array& plain_text, const byte_array& key)
 byte_array GronsfeldDecrypt(const byte_array& cipher_text, const byte_array& key) {
     cout << "Запущено дешифрование!" << endl;
     cout << "Прогресс: ";
-    int one_block = cipher_text.size() / 10;
-    int progress = 0;
+    size_t one_block = cipher_text.size() / 10;
+    size_t progress = 0;
     byte_array plain_text(cipher_text.size());
     for (size_t i = 0; i < cipher_text.size(); i++) {
         plain_text[i] = (cipher_text[i] - key[i % key.size()] + 256) % 256; 
@@ -46,8 +46,8 @@ byte_array GronsfeldDecrypt(const byte_array& cipher_text, const byte_array& key
 byte_array Vernam(const byte_array& first_text, const byte_array& key) {
     cout << "Процесс запущен!" << endl;
     cout << "Прогресс: ";
-    int one_block = first_text.size() / 10;
-    int progress = 0;
+    size_t one_block = first_text.size() / 10;
+    size_t progress = 0;
     byte_array second_text(first_text.size());
     for (size_t i = 0; i < first_text.size(); i++) {
         second_text[i] = first_text[i] ^ key[i]; 

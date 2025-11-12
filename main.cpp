@@ -33,6 +33,7 @@ int main() {
         system("clear");
         cout << "========== ВЫБОР ФАЙЛА ==========" << endl << endl;
         byte_array file = ReadFileToBytearray();
+        
         byte_array key = GetKey(mode, cipher, file.size());
         
 
@@ -40,7 +41,7 @@ int main() {
         cout << "========== ПОДТВЕРЖДЕНИЕ ==========" << endl;
         cout << "Выбранный режим: " << (mode == ModeType::ENCRYPT ? "Шифрование" : "Дешифрование") << endl;
         cout << "Выбранный шифр: " << NameOfCipher(cipher) << endl;
-        cout << "Файл: Загружен" << endl;
+        cout << "Файл: Загружен, " << file.size() << " байт." << endl;
         cout << "Ключ: " << DisplayKey(cipher, key) << endl << endl;
         cout << "Продолжить? 1 - Да / 2 - В меню" << endl;
 

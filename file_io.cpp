@@ -40,7 +40,7 @@ byte_array ReadFileToBytearray() {
             cout << "Ошибка: " << e.what() << endl;
         }
     }
-    cout << "Данные успешно прочитаны!" << endl;
+    cout << "Успещно прочитано " << buffer.size() << " байт!" << endl;
     WaitForEnter();
     return buffer;
 }
